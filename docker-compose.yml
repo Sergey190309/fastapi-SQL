@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: api_container
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      - db
+    command: |
+      bash -c 'uvicorn api.api:app --reload --workers 1 --host 0.0.0.0 --port 8000'
+    volumes:
+      # - .:/usr/src/app
+      - .:/usr/src/app/
+    ports:
+      - 8002:8000
+    environment:
+      - DATABASE_URL=postgresql://user:password@db/fastapy_sql
+  db:
+    container_name: db_container
+    image: postgres
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=fastapy_sql
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sa6702@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: SAsch
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin-data:

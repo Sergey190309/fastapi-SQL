@@ -1,0 +1,7 @@
+SQLAlchemy
+pydantic
+uvicorn
+fastapi
+psycopg2-binary
+
+databases[postgresql]
