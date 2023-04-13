@@ -1,8 +1,9 @@
+# function working with database
 from sqlalchemy.orm import Session
 
 
-from ..models import models
-from ..schemas import schemas
+from ..sqlalchemy_models import models
+from ..validation_models import schemas
 
 
 def get_user(db: Session, user_id: int):
