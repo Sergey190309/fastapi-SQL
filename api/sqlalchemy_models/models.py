@@ -3,6 +3,17 @@ from sqlalchemy.orm import relationship
 
 from ..db.init_db import Base
 
+# user = Table(
+#     'users',
+#     metadata,
+#     Column('id', Integer, primary_key=True, index=True),
+#     Column('email', String, unique=True, index=True),
+#     Column('hashed_password', String),
+#     Column('is_active', Boolean, default=True),
+
+#     relationship('item', back_populates='users')
+# )
+
 
 class User(Base):
     __tablename__ = "users"
@@ -13,6 +24,17 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     items = relationship("Item", back_populates="owner")
+
+# item = Table(
+#     'items',
+#     metadata,
+#     Column('id', Integer, primary_key=True, index=True),
+#     Column('title', String, index=True),
+#     Column('description', String, index=True),
+#     Column('owner_id', Integer, ForeignKey("users.id")),
+
+#     relationship('user', back_populates='items')
+# )
 
 
 class Item(Base):
