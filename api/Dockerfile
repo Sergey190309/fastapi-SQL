@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.11-alpine
+FROM python:slim
 
 ## set work directory
 WORKDIR /usr/src/app
@@ -8,17 +8,18 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# install system dependencies
+RUN apt update
+RUN apt upgrade
+RUN apt -y install netcat gcc
+RUN apt clean
+
 # copy requirements file
 COPY ./requirements.txt /usr/src/app/
 
-# install dependencies
-RUN set -eux \
-    && apk add --no-cache --virtual .build-deps build-base \
-         openssl-dev libffi-dev gcc musl-dev python3-dev \
-        postgresql-dev bash \
-    && pip install --upgrade pip setuptools wheel \
-    && pip install -r /usr/src/app/requirements.txt \
-    && rm -rf /root/.cache/pip
+# install python dependencies
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
 # copy project
 COPY ./ /usr/src/app/

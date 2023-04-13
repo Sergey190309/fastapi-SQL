@@ -2,7 +2,7 @@ from fastapi import FastAPI
 # from sqlalchemy.orm import Session
 
 from .sqlalchemy_models import models
-from .db.database import engine
+from .db.init_db import engine
 from .resources import items_res
 from .resources import users_res
 

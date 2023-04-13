@@ -15,6 +15,7 @@ services:
     ports:
       - 8002:8000
     environment:
+      # - DATABASE_URL=postgresql+asyncpg://user:password@db/fastapy_sql
       - DATABASE_URL=postgresql://user:password@db/fastapy_sql
   db:
     container_name: db_container
