@@ -1,4 +1,5 @@
 # function working with database
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 
@@ -14,8 +15,18 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
+# def get_users(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(models.User).offset(skip).limit(limit).all()
+def get_users(
+        session: Session, skip: int = 0, limit: int = 100) -> [models.User]:
+    selected = select(models.User)
+    result = session.execute(selected)
+    # result = session.execute(selected)
+    # print('\n\nseleced ->', selected, '\n',
+    #       'result ->', result, '\n',
+    #       )
+    return result.scalars().all()
+    # return db.query(models.User).offset(skip).limit(limit).all()
 
 
 def create_user(db: Session, user: schemas.UserCreate):

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from ..validation_models import schemas
 from ..crud import crud
-from ..db.init_db import SessionLocal
+from ..db.init_db import AsyncSession
 
 
 router = APIRouter()
@@ -11,7 +11,7 @@ router = APIRouter()
 
 # Dependency
 def get_db():
-    db = SessionLocal()
+    db = AsyncSession()
     try:
         yield db
     finally:

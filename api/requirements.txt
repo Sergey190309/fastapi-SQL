@@ -2,7 +2,7 @@ SQLAlchemy
 pydantic
 uvicorn
 fastapi
-psycopg2-binary
+# psycopg2-binary
 asyncpg
 
 databases[postgresql]
