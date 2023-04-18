@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..validation_models import schemas
 from ..crud import crud
@@ -10,15 +10,14 @@ router = APIRouter()
 
 
 # Dependency
-def get_db():
-    db = async_session()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_session() -> AsyncSession:
+    async with async_session() as session:
+        yield session
 
 
 @router.get('/', response_model=list[schemas.Item])
-def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = crud.get_items(db, skip=skip, limit=limit)
+async def read_items(
+        skip: int = 0, limit: int = 100,
+        session: AsyncSession = Depends(get_session)):
+    items = await crud.get_items(session, skip=skip, limit=limit)
     return items

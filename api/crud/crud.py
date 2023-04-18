@@ -12,13 +12,16 @@ from ..validation_models import schemas
 #     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-async def get_user_by_email(session: AsyncSession(), email: str):
-    return await session.query(
-        models.User).filter(models.User.email == email).first()
+async def get_user_by_email(session: AsyncSession, email: str) -> models.User:
+    query_result = await session.execute(select(models.User).where(
+        models.User.email == email))
+    result = query_result.first()
+    # print('\n------>crud>get_user_by_email\n',
+    #       'result ->', result, '\n',
+    #       )
+    return result
 
 
-# def get_users(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(models.User).offset(skip).limit(limit).all()
 async def get_users(
         session: AsyncSession(),
         skip: int = 0, limit: int = 100) -> [models.User]:
@@ -36,15 +39,22 @@ async def create_user(
         session: AsyncSession(), user: schemas.UserCreate) -> models.User:
     fake_hashed_password = user.password + "notreallyhashed"
     db_user = models.User(
-        email=user.email, hashed_password=fake_hashed_password)
+        email=user.email, hashed_password=fake_hashed_password,
+        )
     session.add(db_user)
-    session.commit()
-    session.refresh(db_user)
-    return await db_user
+    await session.commit()
+    return db_user
 
 
-# def get_items(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(models.Item).offset(skip).limit(limit).all()
+async def get_items(session: AsyncSession, skip: int = 0, limit: int = 100):
+    # query = select(models.Item)
+    query = select(models.Item).offset(skip).limit(limit)
+    query_result = await session.execute(query)
+    result = query_result.all()
+    # print('\n----->crud>get_items\n',
+    #       'query ->', query, '\n',
+    #       )
+    return result
 
 
 # def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):

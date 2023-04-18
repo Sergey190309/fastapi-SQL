@@ -5,12 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 # from sqlalchemy import create_engine
 # from databases import Database
 from sqlalchemy.orm import sessionmaker
+from databases import Database
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # database = Database(DATABASE_URL)
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL, future=True, echo=True)
 
 Base = declarative_base()
 
@@ -28,3 +29,6 @@ async def init_models():
 async def get_session() -> AsyncSession:
     async with async_session() as session:
         yield session
+
+
+database = Database(DATABASE_URL)
