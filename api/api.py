@@ -7,7 +7,7 @@ from .db.init_db import (
     # engine,
     database)
 # from .sqlalchemy_models.models import Base
-from .resources import items_res
+# from .resources import items_res
 from .resources import users_res
 
 
@@ -34,4 +34,4 @@ async def shutdown():
 
 
 app.include_router(users_res.router, prefix='/users', tags=['users'])
-app.include_router(items_res.router, prefix='/items', tags=['items'])
+# app.include_router(items_res.router, prefix='/items', tags=['items'])

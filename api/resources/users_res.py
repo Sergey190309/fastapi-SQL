@@ -1,7 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import (
+    APIRouter,
+    Depends,
+    # HTTPException
+    )
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..sqlalchemy_models import models
+# from ..sqlalchemy_models import models
 from ..validation_models import schemas
 from ..crud import crud
 from ..db.init_db import async_session
@@ -21,22 +25,22 @@ async def get_session() -> AsyncSession:
 #         db.close()
 
 
-@router.post('/', response_model=schemas.User)
-async def create_user(
-        user: schemas.UserCreate,
-        session: AsyncSession() = Depends(get_session)) -> models.User:
-    # db_user = crud.get_user_by_email(db, email=user.email)
-    users = await crud.get_user_by_email(session, email=user.email)
-    # print('\nuser_res>post\n',
-    #       'users ->', users, '\n'
-    #       )
-    if users:
-        raise HTTPException(
-            status_code=400, detail='Email already registered')
-    created_user = await crud.create_user(session=session, user=user)
-    # return created_user
-    return created_user
-    # return await crud.create_user(db=session, user=user)
+# @router.post('/', response_model=schemas.User)
+# async def create_user(
+#         user: schemas.UserCreate,
+#         session: AsyncSession() = Depends(get_session)) -> models.User:
+#     # db_user = crud.get_user_by_email(db, email=user.email)
+#     users = await crud.get_user_by_email(session, email=user.email)
+#     # print('\nuser_res>post\n',
+#     #       'users ->', users, '\n'
+#     #       )
+#     if users:
+#         raise HTTPException(
+#             status_code=400, detail='Email already registered')
+#     created_user = await crud.create_user(session=session, user=user)
+#     # return created_user
+#     return created_user
+#     # return await crud.create_user(db=session, user=user)
 
 
 @router.get("/", response_model=list[schemas.User])
