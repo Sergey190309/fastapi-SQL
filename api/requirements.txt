@@ -5,4 +5,4 @@ fastapi
 # psycopg2-binary
 asyncpg
 
-databases[postgresql]
+# databases[postgresql]

@@ -12,15 +12,15 @@ from ..sqlalchemy_models import models
 #     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-# async def get_user_by_email(
-#         session: AsyncSession, email: str) -> models.User:
-#     query_result = await session.execute(select(models.User).where(
-#         models.User.email == email))
-#     result = query_result.first()
-#     # print('\n------>crud>get_user_by_email\n',
-#     #       'result ->', result, '\n',
-#     #       )
-#     return result
+async def get_user_by_email(
+        session: AsyncSession, email: str) -> models.User:
+    query_result = await session.execute(select(models.User).where(
+        models.User.email == email))
+    result = query_result.first()
+    # print('\n------>crud>get_user_by_email\n',
+    #       'result ->', result, '\n',
+    #       )
+    return result
 
 
 async def get_users(
@@ -29,9 +29,9 @@ async def get_users(
     selected = select(models.User)
     result = await session.execute(selected)
     # result = session.execute(selected)
-    # print('\n\nseleced ->', selected, '\n',
-    #       'result ->', result, '\n',
-    #       )
+    print('\n\nseleced ->', selected, '\n',
+          'result ->', result, '\n',
+          )
     return result.scalars().all()
     # return db.query(models.User).offset(skip).limit(limit).all()
 

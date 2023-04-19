@@ -47,7 +47,7 @@ async def get_session() -> AsyncSession:
 async def read_users(
         skip: int = 0, limit: int = 100,
         sessoin: AsyncSession = Depends(get_session)):
-    print('\n\nuser_res>get\n\n')
+    # print('\n\nuser_res>get\n\n')
     users = await crud.get_users(sessoin, skip=skip, limit=limit)
     return users
 
