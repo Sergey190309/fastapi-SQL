@@ -1,48 +1,34 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from typing import List
+from sqlalchemy import (
+    # Boolean, Column,
+    ForeignKey,
+    # Integer, String
+    )
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from ..db.init_db import Base
 
-# user = Table(
-#     'users',
-#     metadata,
-#     Column('id', Integer, primary_key=True, index=True),
-#     Column('email', String, unique=True, index=True),
-#     Column('hashed_password', String),
-#     Column('is_active', Boolean, default=True),
-
-#     relationship('item', back_populates='users')
-# )
-
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "users_table"
 
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    email: Mapped[str] = mapped_column(unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column()
+    is_active: Mapped[bool] = mapped_column(default=True)
 
-    items = relationship("Item", back_populates="owner")
-
-# item = Table(
-#     'items',
-#     metadata,
-#     Column('id', Integer, primary_key=True, index=True),
-#     Column('title', String, index=True),
-#     Column('description', String, index=True),
-#     Column('owner_id', Integer, ForeignKey("users.id")),
-
-#     relationship('user', back_populates='items')
-# )
+    items: Mapped[List['Item']] = relationship(lazy='raise')
+    # items: Mapped[List['Item']] = relationship(
+    #     back_populates='owner', lazy='raise')
 
 
 class Item(Base):
-    __tablename__ = "items"
+    __tablename__ = "items_table"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(index=True)
+    description: Mapped[str] = mapped_column(index=True)
+    owner_id: Mapped[int] = mapped_column(ForeignKey('users_table.id'))
 
-    owner = relationship("User", back_populates="items")
+    # owner: Mapped['User'] =
+    # relationship(back_populates="items", lazy='raise')

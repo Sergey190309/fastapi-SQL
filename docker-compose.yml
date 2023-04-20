@@ -15,8 +15,8 @@ services:
     ports:
       - 8002:8000
     environment:
-      # - DATABASE_URL=postgresql+asyncpg://user:password@db/fastapy_sql
-      - DATABASE_URL=postgresql://user:password@db/fastapy_sql
+      - DATABASE_URL=postgresql+asyncpg://user:password@db/fastapy_sql
+      # - DATABASE_URL=postgresql://user:password@db/fastapy_sql
   db:
     container_name: db_container
     image: postgres
@@ -43,8 +43,8 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - pgadmin_data:/var/lib/pgadmin
 
 volumes:
   postgres_data:
-  pgadmin-data:
+  pgadmin_data:
