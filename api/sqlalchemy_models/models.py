@@ -17,8 +17,9 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column()
     is_active: Mapped[bool] = mapped_column(default=True)
 
-    items: Mapped[List['Item']] = relationship(back_populates='owner')
-    # items = relationship("Item", back_populates="users")
+    items: Mapped[List['Item']] = relationship(lazy='raise')
+    # items: Mapped[List['Item']] = relationship(
+    #     back_populates='owner', lazy='raise')
 
 
 class Item(Base):
@@ -27,6 +28,7 @@ class Item(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     title: Mapped[str] = mapped_column(index=True)
     description: Mapped[str] = mapped_column(index=True)
-    owner_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    owner_id: Mapped[int] = mapped_column(ForeignKey('users_table.id'))
 
-    owner: Mapped['User'] = relationship(back_populates="items")
+    # owner: Mapped['User'] =
+    # relationship(back_populates="items", lazy='raise')

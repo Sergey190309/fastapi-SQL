@@ -1,6 +1,7 @@
 # function working with database
 # from sqlalchemy.orm import Session
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -16,6 +17,7 @@ async def get_user_by_email(
         session: AsyncSession, email: str) -> models.User:
     query_result = await session.execute(select(models.User).where(
         models.User.email == email))
+    # await session.refresh(query_result)
     result = query_result.first()
     # print('\n------>crud>get_user_by_email\n',
     #       'result ->', result, '\n',
@@ -26,13 +28,16 @@ async def get_user_by_email(
 async def get_users(
         session: AsyncSession(),
         skip: int = 0, limit: int = 100) -> [models.User]:
-    selected = select(models.User)
-    result = await session.execute(selected)
-    # result = session.execute(selected)
+    selected = select(models.User).options(selectinload(models.User.items))
+    query_result = await session.execute(selected)
+    result = query_result.scalars().all()
+    await session.commit()
+    # await session.refresh(query_result, ['items'])
+
     print('\n\nseleced ->', selected, '\n',
-          'result ->', result, '\n',
+          'query_result ->', query_result, '\n',
           )
-    return result.scalars().all()
+    return result
     # return db.query(models.User).offset(skip).limit(limit).all()
 
 
