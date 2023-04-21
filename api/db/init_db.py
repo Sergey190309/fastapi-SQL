@@ -17,6 +17,7 @@ class Base(DeclarativeBase):
 # Base = declarative_base()
 
 
+# async_session = async_sessionmaker(engine)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 

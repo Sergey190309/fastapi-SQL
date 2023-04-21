@@ -1,12 +1,12 @@
-# function working with database
-# from sqlalchemy.orm import Session
-from sqlalchemy import select
+# Functions working with database
+from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-from ..sqlalchemy_models import models
-# from ..validation_models import schemas
+from api.db.init_db import async_session
+from api.sqlalchemy_models import models
+from api.validation_models import schemas
 
 
 # def get_user(db: Session, user_id: int):
@@ -15,8 +15,9 @@ from ..sqlalchemy_models import models
 
 async def get_user_by_email(
         session: AsyncSession, email: str) -> models.User:
-    query_result = await session.execute(select(models.User).where(
-        models.User.email == email))
+    selected = select(models.User).where(models.User.email == email).options(
+        selectinload(models.User.items))
+    query_result = await session.execute(selected)
     # await session.refresh(query_result)
     result = query_result.first()
     # print('\n------>crud>get_user_by_email\n',
@@ -32,24 +33,33 @@ async def get_users(
     query_result = await session.execute(selected)
     result = query_result.scalars().all()
     await session.commit()
-    # await session.refresh(query_result, ['items'])
-
-    print('\n\nseleced ->', selected, '\n',
-          'query_result ->', query_result, '\n',
-          )
+    # print('\n\nseleced ->', selected, '\n',
+    #       'result ->', result, '\n',
+    #       )
     return result
     # return db.query(models.User).offset(skip).limit(limit).all()
 
 
-# async def create_user(
-#         session: AsyncSession(), user: schemas.UserCreate) -> models.User:
-#     fake_hashed_password = user.password + "notreallyhashed"
-#     db_user = models.User(
-#         email=user.email, hashed_password=fake_hashed_password,
-#         )
-#     session.add(db_user)
-#     await session.commit()
-#     return db_user
+async def create_user(
+        session: AsyncSession(),
+        user: schemas.UserCreate) -> models.User:
+    fake_hashed_password = user.password + "notreallyhashed"
+    user = models.User(
+        email=user.email, hashed_password=fake_hashed_password,
+        )
+
+    # async with async_session() as inner_session:
+    #     async with inner_session.begin():
+    #         inner_session.add(user)
+
+    # await session.refresh(models.User, ['items'])
+    session.add(user)
+    await session.commit()
+
+    print('\ncrud>create_user\n',
+          #   'stmt ->', stmt2, '\n'
+          )
+    return user
 
 
 # async def get_items(session: AsyncSession, skip: int = 0, limit: int = 100):
