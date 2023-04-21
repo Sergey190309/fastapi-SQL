@@ -4,7 +4,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-from api.db.init_db import async_session
+# from api.db.init_db import async_session
 from api.sqlalchemy_models import models
 from api.validation_models import schemas
 
