@@ -26,6 +26,13 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserUpdate(UserBase):
+    id: int
+    email: str | None
+    is_active: bool | None
+    items: list[Item] | None
+
+
 class User(UserBase):
     id: int
     is_active: bool

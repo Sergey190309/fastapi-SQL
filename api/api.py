@@ -3,11 +3,8 @@
 from fastapi import FastAPI
 # from sqlalchemy.orm import Session
 
-from .db.init_db import (
-    Base,
-    engine,
-    )
-from .resources import users_res
+from api.db.init_db import (Base, engine)
+from api.resources import users_res, items_res
 
 
 app = FastAPI()
@@ -28,4 +25,4 @@ async def shutdown():
 
 
 app.include_router(users_res.router, prefix='/users', tags=['users'])
-# app.include_router(items_res.router, prefix='/items', tags=['items'])
+app.include_router(items_res.router, prefix='/items', tags=['items'])

@@ -17,7 +17,10 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column()
     is_active: Mapped[bool] = mapped_column(default=True)
 
-    items: Mapped[List['Item']] = relationship(lazy='raise')
+    items: Mapped[List['Item']] = relationship(
+        back_populates='user',
+        cascade='all, delete-orphan',
+        lazy='raise')
     # items: Mapped[List['Item']] = relationship(
     #     back_populates='owner', lazy='raise')
 
@@ -29,6 +32,8 @@ class Item(Base):
     title: Mapped[str] = mapped_column(index=True)
     description: Mapped[str] = mapped_column(index=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey('users_table.id'))
+
+    user: Mapped['User'] = relationship(back_populates='items')
 
     # owner: Mapped['User'] =
     # relationship(back_populates="items", lazy='raise')

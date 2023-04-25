@@ -1,23 +1,25 @@
-# from fastapi import APIRouter, Depends
-# from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import (APIRouter,
+                     HTTPException
+                     )
 
-# from ..validation_models import schemas
-# from ..crud import crud
-# from ..db.init_db import async_session
+from api.sqlalchemy_models import models
+from api.validation_models import schemas
+from api.crud import item_crud
 
-
-# router = APIRouter()
-
-
-# # Dependency
-# async def get_session() -> AsyncSession:
-#     async with async_session() as session:
-#         yield session
+router = APIRouter()
 
 
-# @router.get('/', response_model=list[schemas.Item])
-# async def read_items(
-#         skip: int = 0, limit: int = 100,
-#         session: AsyncSession = Depends(get_session)):
-#     items = await crud.get_items(session, skip=skip, limit=limit)
-#     return items
+@router.get('/', response_model=list[schemas.Item])
+async def read_items() -> list[models.Item]:
+    items = await item_crud.get_items()
+    return items
+
+
+@router.get('/{item_id}', response_model=schemas.Item)
+async def read_item_by_id(item_id: int) -> models.Item:
+    item = await item_crud.item_by_id(item_id=item_id)
+    if not item:
+        raise HTTPException(
+            status_code=404,
+            detail=f'Item with id {item_id} does not found.')
+    return item

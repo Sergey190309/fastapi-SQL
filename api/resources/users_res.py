@@ -1,57 +1,75 @@
-from fastapi import (
-    APIRouter,
-    Depends,
-    HTTPException
-    )
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from ..sqlalchemy_models import models
-from ..validation_models import schemas
-from ..crud import crud
-from ..db.init_db import get_session
+from fastapi import (APIRouter, HTTPException)
+# from sqlalchemy.ext.asyncio import AsyncSession
+from api.sqlalchemy_models import models
+from api.validation_models import schemas
+from api.crud import user_crud
+# from ..db.init_db import get_session
 
 router = APIRouter()
 
 
-@router.post('/', response_model=schemas.User)
-async def create_user(
-        user: schemas.UserCreate,
-        session: AsyncSession() = Depends(get_session)) -> models.User:
-    # db_user = crud.get_user_by_email(db, email=user.email)
-    users = await crud.get_user_by_email(session, email=user.email)
-    # print('\nuser_res>post\n',
-    #       'users ->', users, '\n'
-    #       )
-    if users:
-        raise HTTPException(
-            status_code=400, detail='Email already registered')
-    created_user = await crud.create_user(session=session, user=user)
-    # return created_user
-    return created_user
-    # return await crud.create_user(db=session, user=user)
-
-
 @router.get("/", response_model=list[schemas.User])
-async def read_users(
-        skip: int = 0, limit: int = 100,
-        sessoin: AsyncSession = Depends(get_session)):
-    users = await crud.get_users(sessoin, skip=skip, limit=limit)
-    # print('\nuser_resp>get\n',
-    #       'users ->', users, '\n'
-    #       )
+async def read_users() -> list[models.User]:
+    users = await user_crud.get_users()
     return users
 
 
-# @router.get("/{user_id}", response_model=schemas.User)
-# def read_user(user_id: int, db: Session = Depends(get_db)):
-#     db_user = crud.get_user(db, user_id=user_id)
-#     if db_user is None:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return db_user
+@router.post('/', response_model=schemas.User)
+async def create_user(user: schemas.UserCreate) -> models.User | None:
+    existing_user = await user_crud.get_user_by_email(email=user.email)
+    if existing_user:
+        raise HTTPException(
+            status_code=400, detail='This email already registered.')
+    created_user = await user_crud.create_user(user=user)
+    return created_user
 
 
-# @router.post("/{user_id}/items/", response_model=schemas.Item)
-# def create_item_for_user(
-#     user_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)
-# ):
-#     return crud.create_user_item(db=db, item=item, user_id=user_id)
+@router.delete('/', response_model=schemas.User)
+async def delete_user(user_id: int) -> models.User | None:
+    existing_user = await user_crud.get_user_by_id(user_id=user_id)
+    if not existing_user:
+        raise HTTPException(
+            status_code=404, detail=f'User with id {user_id} not found.')
+    await user_crud.delete_user_by_id(existing_user)
+    return existing_user
+
+
+@router.put("/", response_model=schemas.User)
+async def update_user(
+        incoming_user: schemas.UserUpdate) -> models.User:
+    if incoming_user.email:
+        user_by_email = await user_crud.get_user_by_email(
+            incoming_user.email)
+        if user_by_email:
+            raise HTTPException(
+                status_code=400,
+                detail='User with planned email already registered')
+    user = await user_crud.get_user(user_id=incoming_user.id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    outbound_user = await user_crud.update_user(
+        user=user, incoming_user=incoming_user)
+    # print('\nusers_res>update_user\n',
+    #       'outbound_user ->', outbound_user, '\n',
+    #       )
+    return outbound_user
+
+
+@router.get("/{user_id}", response_model=schemas.User)
+async def read_user(user_id: int) -> models.User:
+    user = await user_crud.get_user(user_id=user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+@router.post("/{user_id}/items/", response_model=schemas.Item)
+async def create_item_for_user(
+        user_id: int, item: schemas.ItemCreate) -> models.Item:
+    existing_user = await user_crud.get_user_by_id(user_id=user_id)
+    if not existing_user:
+        raise HTTPException(
+            status_code=404, detail=f'User with id {user_id} not found.')
+    item = await user_crud.create_user_item(
+        incoming_item=item, user_id=user_id)
+    return item
