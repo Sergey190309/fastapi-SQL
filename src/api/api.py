@@ -4,7 +4,7 @@ from fastapi import FastAPI
 # from sqlalchemy.orm import Session
 
 from src.api.db.init_db import Base, engine
-from src.api.resources import users_res, items_res
+from src.api.resources import users_res, items_res, ping_res
 
 
 app = FastAPI()
@@ -24,5 +24,6 @@ async def shutdown():
     # await database.disconnect()
 
 
+app.include_router(ping_res.router, prefix='/ping', tags=['ping'])
 app.include_router(users_res.router, prefix='/users', tags=['users'])
 app.include_router(items_res.router, prefix='/items', tags=['items'])

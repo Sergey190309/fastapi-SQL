@@ -2,8 +2,8 @@ asyncpg
 fastapi
 pydantic
 SQLAlchemy
-# sqlmodel
 uvicorn
-# psycopg2-binary
 
-# databases[postgresql]
+# dev
+pytest
+httpx
