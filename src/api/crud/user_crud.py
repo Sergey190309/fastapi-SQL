@@ -4,10 +4,10 @@ from sqlalchemy.orm import selectinload
 # from sqlalchemy.ext.asyncio import AsyncSession
 
 
-from api.db.init_db import async_session
-from api.sqlalchemy_models import models
-from api.validation_models import schemas
-from api.crud.item_crud import item_by_id
+from src.api.db.init_db import async_session
+from src.api.sqlalchemy_models import models
+from src.api.validation_models import schemas
+from src.api.crud.item_crud import item_by_id
 
 
 async def get_user(user_id: int) -> models.User | None:

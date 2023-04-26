@@ -3,8 +3,8 @@
 from fastapi import FastAPI
 # from sqlalchemy.orm import Session
 
-from api.db.init_db import (Base, engine)
-from api.resources import users_res, items_res
+from src.api.db.init_db import Base, engine
+from src.api.resources import users_res, items_res
 
 
 app = FastAPI()

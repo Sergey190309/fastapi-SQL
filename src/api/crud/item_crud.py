@@ -1,6 +1,6 @@
 from sqlalchemy import select
-from api.db.init_db import async_session
-from api.sqlalchemy_models import models
+from src.api.db.init_db import async_session
+from src.api.sqlalchemy_models import models
 
 
 async def get_items() -> list[models.Item]:

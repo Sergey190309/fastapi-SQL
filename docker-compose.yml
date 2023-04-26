@@ -3,12 +3,12 @@ version: '3.8'
 services:
   api:
     container_name: api_container
-    build: ./api
+    build: ./src
     restart: unless-stopped
     depends_on:
       - db
     command: |
-      bash -c 'uvicorn api.api:app --reload --workers 1 --host 0.0.0.0 --port 8000'
+      bash -c 'uvicorn src.api.api:app --reload --workers 1 --host 0.0.0.0 --port 8000'
     volumes:
       # - .:/usr/src/app
       - .:/usr/src/app/

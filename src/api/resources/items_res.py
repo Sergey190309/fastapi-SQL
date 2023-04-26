@@ -2,9 +2,9 @@ from fastapi import (APIRouter,
                      HTTPException
                      )
 
-from api.sqlalchemy_models import models
-from api.validation_models import schemas
-from api.crud import item_crud
+from src.api.sqlalchemy_models import models
+from src.api.validation_models import schemas
+from src.api.crud import item_crud
 
 router = APIRouter()
 

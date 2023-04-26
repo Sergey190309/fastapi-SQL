@@ -1,8 +1,8 @@
 from fastapi import (APIRouter, HTTPException)
 # from sqlalchemy.ext.asyncio import AsyncSession
-from api.sqlalchemy_models import models
-from api.validation_models import schemas
-from api.crud import user_crud
+from src.api.sqlalchemy_models import models
+from src.api.validation_models import schemas
+from src.api.crud import user_crud
 # from ..db.init_db import get_session
 
 router = APIRouter()
