@@ -5,5 +5,11 @@ SQLAlchemy
 uvicorn
 
 # dev
-pytest
+# pytest
 httpx
+# trio
+# asyncio
+pytest-asyncio
+
+# ???
+asgi_lifespan

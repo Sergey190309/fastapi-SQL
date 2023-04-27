@@ -14,6 +14,14 @@ async def read_users() -> list[models.User]:
     return users
 
 
+@router.get("/{user_id}", response_model=schemas.User)
+async def read_user(user_id: int) -> models.User:
+    user = await user_crud.get_user(user_id=user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
 @router.post('/', response_model=schemas.User)
 async def create_user(user: schemas.UserCreate) -> models.User | None:
     existing_user = await user_crud.get_user_by_email(email=user.email)
@@ -53,14 +61,6 @@ async def update_user(
     #       'outbound_user ->', outbound_user, '\n',
     #       )
     return outbound_user
-
-
-@router.get("/{user_id}", response_model=schemas.User)
-async def read_user(user_id: int) -> models.User:
-    user = await user_crud.get_user(user_id=user_id)
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
 
 
 @router.post("/{user_id}/items/", response_model=schemas.Item)
