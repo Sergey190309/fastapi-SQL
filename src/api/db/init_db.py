@@ -6,10 +6,11 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker
     )
+from sqlalchemy.pool import NullPool
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL, poolclass=NullPool, echo=True)
 
 
 class Base(DeclarativeBase):

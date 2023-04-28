@@ -4,12 +4,8 @@ pydantic
 SQLAlchemy
 uvicorn
 
-# dev
-# pytest
 httpx
-# trio
-# asyncio
+pytest-mock
 pytest-asyncio
-
-# ???
 asgi_lifespan
+mock
