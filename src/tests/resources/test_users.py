@@ -1,4 +1,4 @@
-import json
+# import json
 import pytest
 from httpx import AsyncClient
 # from asgi_lifespan import LifespanManager
@@ -49,7 +49,7 @@ async def test_users_read_users(mocker, async_test_client: AsyncClient):
 
 
 @pytest.mark.asyncio
-@pytest.mark.active
+# @pytest.mark.active
 async def test_users_read_user(mocker, async_test_client: AsyncClient):
     user_id = 3
     return_value = {
