@@ -11,7 +11,8 @@ ENV PYTHONUNBUFFERED 1
 # install system dependencies
 RUN apt update
 RUN apt upgrade
-RUN apt -y install netcat gcc
+RUN apt -y install gcc netcat-traditional
+# RUN apt -y install netcat
 RUN apt clean
 
 # copy requirements file

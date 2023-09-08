@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "fastapi-sql"
+version = "0.1.0"
+description = ""
+authors = ["SA <sa6702@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+asyncpg = "^0.28.0"
+fastapi = "^0.103.1"
+pydantic = "^2.3.0"
+sqlalchemy = "^2.0.20"
+uvicorn = "^0.23.2"
+
+
+[tool.poetry.group.dev.dependencies]
+httpx = "^0.24.1"
+pytest-mock = "^3.11.1"
+pytest-asyncio = "^0.21.1"
+asgi-lifespan = "^2.1.0"
+mock = "^5.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

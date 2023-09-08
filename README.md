@@ -1,2 +1,2 @@
 # fastapi-SQL
-Studing FastAPI with PostreSQL &amp; SQLAlchemy
+Studing FastAPI with PostreSQL SQLAlchemy
