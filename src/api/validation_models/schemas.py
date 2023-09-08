@@ -14,8 +14,8 @@ class Item(ItemBase):
     id: int
     owner_id: int
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 
 class UserBase(BaseModel):
@@ -38,5 +38,5 @@ class User(UserBase):
     is_active: bool
     items: list[Item] = []
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True

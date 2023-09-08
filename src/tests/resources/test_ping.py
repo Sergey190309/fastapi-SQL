@@ -6,7 +6,7 @@ from httpx import AsyncClient
 
 
 @pytest.mark.asyncio
-# @pytest.mark.active
+@pytest.mark.active
 async def test_ping(async_test_client: AsyncClient):
     response = await async_test_client.get('/ping/')
     assert response.status_code == 200
