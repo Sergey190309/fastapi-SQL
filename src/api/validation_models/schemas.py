@@ -30,7 +30,7 @@ class UserUpdate(UserBase):
     id: int
     email: str | None
     is_active: bool | None
-    items: list[Item] | None
+    # items: list[Item] | None
 
 
 class User(UserBase):

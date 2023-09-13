@@ -47,8 +47,8 @@ async def update_user(
         incoming_user: schemas.UserUpdate) -> models.User:
     if incoming_user.email:
         user_by_email = await user_crud.get_user_by_email(
-            incoming_user.email)
-        if user_by_email:
+            email=incoming_user.email)
+        if user_by_email and not user_by_email.id == incoming_user.id:
             raise HTTPException(
                 status_code=400,
                 detail='User with planned email already registered')

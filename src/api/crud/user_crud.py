@@ -68,6 +68,9 @@ async def update_user(
         user: schemas.User, incoming_user: schemas.UserUpdate) -> models.User:
     update_dict = {k: v for k, v in incoming_user.__dict__.items()
                    if v is not None}
+    # print('\nuser_crud>update_user',
+    #       'update_dict ->', update_dict,
+    #       '\n')
     async with async_session() as session:
         async with session.begin():
             stmt = select(models.User).where(
